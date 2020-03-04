@@ -1,27 +1,26 @@
-function add (a,b) {
-	return a+b;
-}
+function add(a,b) {return a+b;}
 
-function subtract (a, b) {
-	return a-b;
-}
+function subtract(a,b) {return a-b;}
 
-function multiply (a,b) {
-    return a*b;
-}
+function multiply(a,b) {return a*b;}
 
-function divide (a,b) {
-    return a/b;
-}
+function divide(a,b) {return a/b;}
 
-function operate (operator,a,b) {
+function exponent(a,b) {return a**b;}
+
+function operate(operator,a,b) // perform chosen operation
+{
     return operator(a,b);
 }
 
-function displayDigit(e)
+function displayDigit(e) // print and save digit for calculation
 {
+    if (calcJustRan) // result of previous calculation is first arg, need operator before digit
+        return;
     if (needsOperator) // no operator yet: set first arg
     {
+        if (a.includes(".") && e.target.textContent == ".") // only allow one decimal point
+            return;
         a = `${a}${e.target.textContent}`;
         displayText = `${a}`;
         display.textContent = displayText;
@@ -29,25 +28,87 @@ function displayDigit(e)
     }
     else // set second arg
     {
+        if (b.includes(".") && e.target.textContent == ".") // only allow one decimal point
+            return;
         b = `${b}${e.target.textContent}`;
-        displayText = `${displayText} ${b}`
+        displayText = `${a} ${operator} ${b}`
         display.textContent = displayText;
         needsSecondArg = false;
     }
 }
 
-function displayOperator(e)
+function displayOperator(e) // print and save operator for calculation
 {
     if (needsFirstArg) // need first arg: don't allow operator
         return; 
-    else if (!needsOperator && needsSecondArg) // don't need operator, but need second arg: don't allow multiple operators
+    else if (!needsOperator && needsSecondArg) // don't need operator, need second arg: don't allow multiple operators
         return;
-    else // don't need operator, first arg, or second arg: display previous calculation
+    else // don't need operator, first arg, or second arg: run previous calculation
         compute(e);
     operator = e.target.textContent;
-    displayText = `${displayText} ${operator}`
+    displayText = `${a} ${operator}`
     display.textContent = displayText;
     needsOperator = false;
+    calcJustRan = false;
+}
+
+function backspace() // perform backspace on an input
+{
+    let aLen = a.length;
+    let bLen = b.length;
+    let displayLen = displayText.length;
+    let lastChar = displayText[displayLen-1];
+    if (needsFirstArg || calcJustRan) // can't modify: either no first arg, or output displayed
+    {
+        return;
+    }
+    else if (!needsFirstArg && needsOperator) // no operator yet: modify first arg
+    {
+        if (a != "")
+        {
+            console.log("modifying a");
+            a = a.substr(0,aLen-1);
+            console.log(a);
+            if (displayLen == 1)
+                displayText = "";
+            else if (lastChar == " ")
+                displayText = displayText.substr(0,displayLen-2);
+            else
+                displayText = displayText.substr(0,displayLen-1);
+            display.textContent = displayText;
+            if (a == "") // check if arg totally deleted
+                needsFirstArg = true;
+        }
+    }
+    else if (needsSecondArg) // no second arg yet: modify operator
+    {
+        console.log("modifying op");
+        operator = "";
+        if (lastChar == " ")
+            displayText = displayText.substr(0,displayLen-2);
+        else
+            displayText = displayText.substr(0,displayLen-1);
+        display.textContent = displayText;
+        needsOperator = true;
+    }
+    else // modify second arg
+    {
+        if (b != "")
+        {
+            console.log("modifying b");
+            b = b.substr(0,bLen-1);
+            console.log(b);
+            if (displayLen == 1)
+                displayText = "";
+            else if (lastChar == " ")
+                displayText = displayText.substr(0,displayLen-2);
+            else
+                displayText = displayText.substr(0,displayLen-1);
+            display.textContent = displayText;
+            if (b == "") // check if arg totally deleted
+                needsSecondArg = true;
+        }
+    }
 }
 
 function clearDisplay() // wipe data
@@ -61,10 +122,11 @@ function clearDisplay() // wipe data
    needsFirstArg = true;
    needsSecondArg = true;
    needsOperator = true;
+   calcJustRan = false;
 }
 
-function truncateDecimals(myFloat)
-{   if (myFloat.includes(".")) // truncate unnecessary decimals
+function roundToSigFig(myFloat) // round to significant figures
+{   if (myFloat.includes(".")) // has decimals
     {
         let splitText = myFloat.split(".") 
         let sigFig = -1;
@@ -74,9 +136,9 @@ function truncateDecimals(myFloat)
             if (decimals[i] != "0")
                 sigFig = i;
         }
-        if (sigFig != -1) // found a sig fig, truncate accordingly
+        if (sigFig != -1) // found a sig fig, round
             return `${splitText[0]}.${decimals.substring(0,sigFig+1)}`;
-        else // didn't find a sig fig, eliminate decimals
+        else // didn't find a sig fig, round
             return `${splitText[0]}`;
     }
     else // no decimals
@@ -90,9 +152,10 @@ function prepNextCalc() // prepare for next calculation
     operator = ""; // reset operator
     needsSecondArg = true;
     needsOperator = true;
+    calcJustRan = true;
 }
 
-function compute(e)
+function compute(e) // print result, prepare for next calculation
 {
     if (needsFirstArg || needsOperator|| needsSecondArg) // need all arguments
         return;
@@ -115,12 +178,14 @@ function compute(e)
                 display.textContent = displayText;
                 return;
             }
-            output = operate(divide, floatA, floatB).toFixed(8); // round
+            output = operate(divide, floatA, floatB);
             break;
         }
+        case "^": output = operate(exponent, floatA, floatB); break;
     }
+    output = output.toFixed(8); // round to 8 decimals
     displayText = `${output}`;
-    displayText = truncateDecimals(displayText); // remove unnecessary decimals
+    displayText = roundToSigFig(displayText); // round to significant figures
     display.textContent = displayText;
     prepNextCalc(); // prepare for next calculation
 }
@@ -134,6 +199,7 @@ var output = "";
 var needsFirstArg = true;
 var needsSecondArg = true;
 var needsOperator = true;
+var calcJustRan = false;
 //
 
 // references and event listeners
@@ -152,4 +218,7 @@ equals.addEventListener("click", compute);
 
 const clear = document.querySelector("#clear");
 clear.addEventListener("click", clearDisplay);
+
+const back = document.querySelector("#back");
+back.addEventListener("click", backspace)
 //
