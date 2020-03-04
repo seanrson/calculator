@@ -13,6 +13,13 @@ function operate(operator,a,b) // perform chosen operation
     return operator(a,b);
 }
 
+function inputKey(e) // keyboard support
+{
+    console.log(e.keyCode);
+    let key = document.querySelector(`button[data-key="${e.keyCode}"]`)
+    key.click();
+}
+
 function displayDigit(e) // print and save digit for calculation
 {
     if (calcJustRan) // result of previous calculation is first arg, need operator before digit
@@ -62,7 +69,7 @@ function backspace() // perform backspace on an input
     {
         return;
     }
-    else if (!needsFirstArg && needsOperator) // no operator yet: modify first arg
+    else if (!needsFirstArg && needsOperator && !outputIsFirstArg) // have first arg, no operator: modify first arg
     {
         if (a != "")
         {
@@ -80,7 +87,7 @@ function backspace() // perform backspace on an input
                 needsFirstArg = true;
         }
     }
-    else if (needsSecondArg) // no second arg yet: modify operator
+    else if (!needsOperator && needsSecondArg) // have operator, no second arg: modify operator
     {
         console.log("modifying op");
         operator = "";
@@ -153,6 +160,7 @@ function prepNextCalc() // prepare for next calculation
     needsSecondArg = true;
     needsOperator = true;
     calcJustRan = true;
+    outputIsFirstArg = true;
 }
 
 function compute(e) // print result, prepare for next calculation
@@ -200,18 +208,19 @@ var needsFirstArg = true;
 var needsSecondArg = true;
 var needsOperator = true;
 var calcJustRan = false;
+var outputIsFirstArg = false;
 //
 
 // references and event listeners
 const display = document.querySelector(".display");
 
+window.addEventListener("keydown", inputKey);
+
 const digits = Array.from(document.querySelectorAll(".digit"));
 digits.forEach(digit => digit.addEventListener("click", displayDigit));
-// digits.forEach(digit => digit.addEventListener("keydown", displayDigit));
 
 const operators = Array.from(document.querySelectorAll(".operator"));
 operators.forEach(operator => operator.addEventListener("click", displayOperator));
-// operators.forEach(digit => operator.addEventListener("keydown", displayOperator));
 
 const equals = document.querySelector("#equals");
 equals.addEventListener("click", compute);

@@ -4,30 +4,32 @@
     <head>Welcome to Sean's Calculator :)</head>
     <body>
         <p>Do some maths...</p>
-        <div class="digits">
-            <button class="digit" data-key="48" id="0">0</button>
-            <button class="digit" data-key="49" id="1">1</button>
-            <button class="digit" data-key="50" id="2">2</button>
-            <button class="digit" data-key="51" id="3">3</button>
-            <button class="digit" data-key="52" id="4">4</button>
-            <button class="digit" data-key="53" id="5">5</button>
-            <button class="digit" data-key="54" id="6">6</button>
-            <button class="digit" data-key="55" id="7">7</button>
-            <button class="digit" data-key="56" id="8">8</button>
-            <button class="digit" data-key="57" id="9">9</button>
-            <button class="digit" data-key="46" id=".">.</button>
-        </div>
-        <div class="operators">
-            <button class="operator" id="add">+</button>
-            <button class="operator" id="subtract">-</button>
-            <button class="operator" id="multiply">x</button>
-            <button class="operator" id="divide">/</button>
-            <button class="operator" id="exponent">^</button>             
-        </div>
-        <div class="miscItems">
-            <button class="misc" id="equals">=</button>
-            <button class="misc" id="back">BACKSPACE</button>
-            <button class="misc" id="clear">CLEAR</button>
+        <div class="buttons">
+            <div class="digits">
+                <button class="digit" data-key="48" id="0">0</button>
+                <button class="digit" data-key="49" id="1">1</button>
+                <button class="digit" data-key="50" id="2">2</button>
+                <button class="digit" data-key="51" id="3">3</button>
+                <button class="digit" data-key="52" id="4">4</button>
+                <button class="digit" data-key="53" id="5">5</button>
+                <button class="digit" data-key="54" id="6">6</button>
+                <button class="digit" data-key="55" id="7">7</button>
+                <button class="digit" data-key="56" id="8">8</button>
+                <button class="digit" data-key="57" id="9">9</button>
+                <button class="digit" data-key="190" id=".">.</button>
+            </div>
+            <div class="operators">
+                <button class="operator" data-key="187" id="add">+</button>
+                <button class="operator" data-key="189" id="subtract">-</button>
+                <button class="operator" data-key="88" id="multiply">x</button>
+                <button class="operator" data-key="191" id="divide">/</button>
+                <button class="operator" data-key="54" id="exponent">^</button>             
+            </div>
+            <div class="miscItems">
+                <button class="misc" data-key="13" id="equals">=</button>
+                <button class="misc" data-key="8" id="back">BACKSPACE</button>
+                <button class="misc" data-key="27" id="clear">CLEAR</button>
+            </div>
         </div>
         <div class="displayFrame">
             <text class="display"></text>
