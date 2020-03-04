@@ -14,69 +14,108 @@ function divide (a,b) {
     return a/b;
 }
 
-function operate (fx,a,b) {
-    return `${fx}(a,b)`;
+function operate (operator,a,b) {
+    return operator(a,b);
 }
 
 function displayDigit(e)
 {
-    if (firstValEmpty)
+    if (needsFirstArg || needsOperator) // set first argument
     {
-        a = parseInt(e.target.textContent);
-        console.log(a);
-        displayText = `${displayText} ${a}`
+        a = `${a}${e.target.textContent}`;
+        displayText = `${a}`;
         display.textContent = displayText;
+        needsFirstArg = false;
     }
-    else
+    else // set second argument
     {
-        b = parseInt(e.target.textContent);
-        console.log(b);
+        b = `${b}${e.target.textContent}`;
         displayText = `${displayText} ${b}`
         display.textContent = displayText;
+        needsSecondArg = false;
     }
 }
 
 function displayOperator(e)
 {
-    if (firstValEmpty) // prevent operator from being entered before first value
-        return;
+    if (needsFirstArg) // need first argument before operator
+        return; 
     operator = e.target.textContent;
     displayText = `${displayText} ${operator}`
     display.textContent = displayText;
-    operatorEmpty = false;
+    needsOperator = false;
 }
 
 function clearDisplay()
 {
-   displayText = "";
+   displayText = ""; // reset everything
    display.textContent = displayText;
-   firstValEmpty = true;
-   secondValEmpty = true;
-   operatorEmpty = true;
+   a = "";
+   b = "";
+   operator = "";
+   output = "";
+   needsFirstArg = true;
+   needsSecondArg = true;
+   needsOperator = true;
 }
 
 function compute(e)
 {
-    if (firstValEmpty || operatorEmpty|| secondValEmpty) // can only compute once all values added
+    if (needsFirstArg || needsOperator|| needsSecondArg) // need all arguments
         return;
-    let fx = e.target.id;
-    output = operate(fx, a, b);
-    clearDisplay();
+    let floatA = parseFloat(a); // a, b are strings
+    let floatB = parseFloat(b);
+    switch (operator) // set operation
+    {
+        case "+": output = operate(add, floatA, floatB); break;
+        case "-": output = operate(subtract, floatA, floatB); break;
+        case "x": output = operate(multiply, floatA, floatB); break;
+        case "/": 
+        {   
+            if (floatB == 0) // prevent crash
+            {
+                alert("Division by zero not allowed!")
+                b = "";
+                displayText = `${a}`;
+                display.textContent = displayText;
+                return;
+            }
+            output = operate(divide, floatA, floatB).toFixed(8); // round
+            break;
+        }
+    }
     displayText = `${output}`;
+    display.textContent = displayText;
+    a = displayText; // set result as first argument for next calculation
+    b = ""; // reset second argument
+    operator = ""; // reset operator
+    needsSecondArg = true;
+    needsOperator = true;
 }
 
-const display = document.querySelector(".display");
+// initial values
 let displayText = "";
-var a, b = "";
-var fx, output;
-var firstValEmpty = true;
-var secondValEmpty = true;
-var operatorEmpty = true;
+var a = "";
+var b = "";
+var operator = "";
+var output = "";
+var needsFirstArg = true;
+var needsSecondArg = true;
+var needsOperator = true;
+//
+
+// references and event listeners
+const display = document.querySelector(".display");
+
 const digits = Array.from(document.querySelectorAll(".digit"));
 digits.forEach(digit => digit.addEventListener("click", displayDigit))
+
 const operators = Array.from(document.querySelectorAll(".operator"));
 operators.forEach(operator => operator.addEventListener("click", displayOperator))
+
 const equals = document.querySelector("#equals");
 equals.addEventListener("click", compute);
+
 const clear = document.querySelector("#clear");
 clear.addEventListener("click", clearDisplay);
+//
