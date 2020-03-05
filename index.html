@@ -1,34 +1,38 @@
 <!DOCTYPE HTML>
 <html>
     <title>Sean's Calculator</title>
-    <head>Welcome to Sean's Calculator :)</head>
+    <head>
+        <div id="intro">
+            Welcome to <text id="sean">Sean's</text> Calculator!
+        </div>
+    </head>    
     <body>
         <p>Do some maths...</p>
         <div class="buttons">
             <div class="digits">
-                <button class="digit" data-key="48" id="0">0</button>
-                <button class="digit" data-key="49" id="1">1</button>
-                <button class="digit" data-key="50" id="2">2</button>
-                <button class="digit" data-key="51" id="3">3</button>
-                <button class="digit" data-key="52" id="4">4</button>
-                <button class="digit" data-key="53" id="5">5</button>
-                <button class="digit" data-key="54" id="6">6</button>
-                <button class="digit" data-key="55" id="7">7</button>
-                <button class="digit" data-key="56" id="8">8</button>
-                <button class="digit" data-key="57" id="9">9</button>
-                <button class="digit" data-key="190" id=".">.</button>
+                <button class="button digit" data-key="0" id="0">0</button>
+                <button class="button digit" data-key="1" id="1">1</button>
+                <button class="button digit" data-key="2" id="2">2</button>
+                <button class="button digit" data-key="3" id="3">3</button>
+                <button class="button digit" data-key="4" id="4">4</button>
+                <button class="button digit" data-key="5" id="5">5</button>
+                <button class="button digit" data-key="6" id="6">6</button>
+                <button class="button digit" data-key="7" id="7">7</button>
+                <button class="button digit" data-key="8" id="8">8</button>
+                <button class="button digit" data-key="9" id="9">9</button>
+                <button class="button digit" data-key="." id=".">.</button>
             </div>
             <div class="operators">
-                <button class="operator" data-key="187" id="add">+</button>
-                <button class="operator" data-key="189" id="subtract">-</button>
-                <button class="operator" data-key="88" id="multiply">x</button>
-                <button class="operator" data-key="191" id="divide">/</button>
-                <button class="operator" data-key="54" id="exponent">^</button>             
+                <button class="button operator" data-key="+" id="add">+</button>
+                <button class="button operator" data-key="-" id="subtract">-</button>
+                <button class="button operator" data-key="x" second-key="*" id="multiply">x</button>
+                <button class="button operator" data-key="/" id="divide">/</button>
+                <button class="button operator" data-key="^" id="exponent">^</button>             
             </div>
             <div class="miscItems">
-                <button class="misc" data-key="13" id="equals">=</button>
-                <button class="misc" data-key="8" id="back">BACKSPACE</button>
-                <button class="misc" data-key="27" id="clear">CLEAR</button>
+                <button class="button misc" data-key="=" second-key="Enter" id="equals">=</button>
+                <button class="button misc" data-key="Backspace" id="back">BACKSPACE</button>
+                <button class="button misc" data-key="Escape" id="clear">CLEAR</button>
             </div>
         </div>
         <div class="displayFrame">
@@ -36,4 +40,5 @@
         </div>
     </body>
     <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css"/>
 </html>

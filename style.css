@@ -1,0 +1,86 @@
+html
+{
+    background: url(https://storage.needpix.com/rsynced_images/calculator-1682190_1280.jpg) bottom center;
+    background-size: cover;
+    text-align: center;
+}
+
+
+body
+{
+    margin-top: 10%;
+}
+
+#intro
+{
+    font-size: 24px;
+}
+
+#sean
+{
+    font-weight: bold;
+}
+
+button
+{
+    background: #ededed;
+    border: 1px solid #ccc;
+    padding: 10px 30px;
+    border-radius: 3px;
+    cursor: pointer;
+    height: 64px;
+}
+
+button:focus
+{
+    outline:0;
+}
+
+button:active 
+{
+    background: #e5e5e5;
+    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+       -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+            box-shadow: inset 0px 0px 5px #c1c1c1;
+    outline: none;
+}
+
+.active
+{
+    background: #e5e5e5;
+    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+       -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+            box-shadow: inset 0px 0px 5px #c1c1c1;
+    outline: none;
+}
+
+.operator
+{
+    background-color: blue;
+    color: white;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.misc
+{
+    background-color: red;
+    color: white;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.display
+{
+    font-size: 24px;
+    line-height: 70px;
+}
+
+.displayFrame
+{
+    margin-top: 50px;
+    border: thin double black;
+    border-radius: 5px;
+    box-sizing: border-box;
+    height: 70px;
+}

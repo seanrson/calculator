@@ -1,6 +1,6 @@
 function add(a,b) {return a+b;}
 
-function subtract(a,b) {return a-b;}
+function subtract(a,b) {return a-b;}b 
 
 function multiply(a,b) {return a*b;}
 
@@ -15,12 +15,17 @@ function operate(operator,a,b) // perform chosen operation
 
 function inputKey(e) // keyboard support
 {
-    console.log(e.keyCode);
-    let key = document.querySelector(`button[data-key="${e.keyCode}"]`)
+    let key = document.querySelector(`button[data-key="${e.key}"]`)
+    if (!key) // check alternative key
+        key = document.querySelector(`button[second-key="${e.key}"]`);
+    if (!key) // invalid input
+        return;
+    buttons.forEach(button => button.classList.remove("active")); 
+    key.classList.add("active");
     key.click();
 }
 
-function displayDigit(e) // print and save digit for calculation
+function addDigit(e) // print and save digit for calculation
 {
     if (calcJustRan) // result of previous calculation is first arg, need operator before digit
         return;
@@ -44,7 +49,7 @@ function displayDigit(e) // print and save digit for calculation
     }
 }
 
-function displayOperator(e) // print and save operator for calculation
+function addOperator(e) // print and save operator for calculation
 {
     if (needsFirstArg) // need first arg: don't allow operator
         return; 
@@ -73,9 +78,7 @@ function backspace() // perform backspace on an input
     {
         if (a != "")
         {
-            console.log("modifying a");
             a = a.substr(0,aLen-1);
-            console.log(a);
             if (displayLen == 1)
                 displayText = "";
             else if (lastChar == " ")
@@ -89,7 +92,6 @@ function backspace() // perform backspace on an input
     }
     else if (!needsOperator && needsSecondArg) // have operator, no second arg: modify operator
     {
-        console.log("modifying op");
         operator = "";
         if (lastChar == " ")
             displayText = displayText.substr(0,displayLen-2);
@@ -102,9 +104,7 @@ function backspace() // perform backspace on an input
     {
         if (b != "")
         {
-            console.log("modifying b");
             b = b.substr(0,bLen-1);
-            console.log(b);
             if (displayLen == 1)
                 displayText = "";
             else if (lastChar == " ")
@@ -217,10 +217,10 @@ const display = document.querySelector(".display");
 window.addEventListener("keydown", inputKey);
 
 const digits = Array.from(document.querySelectorAll(".digit"));
-digits.forEach(digit => digit.addEventListener("click", displayDigit));
+digits.forEach(digit => digit.addEventListener("click", addDigit));
 
 const operators = Array.from(document.querySelectorAll(".operator"));
-operators.forEach(operator => operator.addEventListener("click", displayOperator));
+operators.forEach(operator => operator.addEventListener("click", addOperator));
 
 const equals = document.querySelector("#equals");
 equals.addEventListener("click", compute);
@@ -230,4 +230,6 @@ clear.addEventListener("click", clearDisplay);
 
 const back = document.querySelector("#back");
 back.addEventListener("click", backspace)
+
+const buttons = Array.from(document.querySelectorAll(".button"))
 //
